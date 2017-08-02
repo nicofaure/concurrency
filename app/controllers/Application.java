@@ -43,9 +43,8 @@ public class Application extends Controller {
         JPA.withTransaction(()->{
             System.out.println("BEGIN updateWithSleep");
             NfaureTest entity = new NfaureTest();
-            entity.setCustomerId(1L);
-            entity.setCustomerName("UPDATEWITHSLEEP");
-            entity.setCustomerCity("UPDATEWITHSLEEP");
+            entity.setCustomerName("UPDATEWITHSLEEP-NICO");
+            entity.setCustomerCity("UPDATEWITHSLEEP-NICO");
             JPA.em().merge(entity);
             System.out.println("WAITING updateWithSleep");
             sleep(20000L);
@@ -60,8 +59,8 @@ public class Application extends Controller {
             System.out.println("BEGIN update");
             NfaureTest entity = new NfaureTest();
             entity.setCustomerId(1L);
-            entity.setCustomerName("UPDATE");
-            entity.setCustomerCity("UPDATE");
+            entity.setCustomerName("UPDATE-NICO");
+            entity.setCustomerCity("UPDATE-NICO");
             JPA.em().merge(entity);
             System.out.println("COMMITING update");
         });
@@ -73,11 +72,11 @@ public class Application extends Controller {
     public static Result updateWithSleepAndLock(){
         JPA.withTransaction(()->{
             System.out.println("BEGIN updateWithSleepAndLock");
+            JPA.em().setProperty("javax.persistence.lock.timeout",1);
             NfaureTest entity = JPA.em().find(NfaureTest.class,1L);
-            JPA.em().lock(entity,LockModeType.PESSIMISTIC_READ);
-            entity.setCustomerId(1L);
-            entity.setCustomerName("UPDATEWITHSLEEP");
-            entity.setCustomerCity("UPDATEWITHSLEEP");
+            JPA.em().lock(entity,LockModeType.PESSIMISTIC_WRITE);
+            entity.setCustomerName("UPDATEWITHSLEEPANDLOCK-NICO");
+            entity.setCustomerCity("UPDATEWITHSLEEPANDLOCK-NICO");
             JPA.em().merge(entity);
             System.out.println("WAITING updateWithSleepAndLock");
             sleep(20000L);
@@ -99,13 +98,13 @@ public class Application extends Controller {
 
     public static Result updateWithLock(){
         JPA.withTransaction(()->{
-            System.out.println("BEGIN updateWithLock");
-            NfaureTest entity = JPA.em().find(NfaureTest.class,1L,LockModeType.PESSIMISTIC_READ);
-            entity.setCustomerId(1L);
-            entity.setCustomerName("UPDATE");
-            entity.setCustomerCity("UPDATE");
+            System.out.println("BEGIN updateWithLock - Nico");
+            JPA.em().setProperty("javax.persistence.lock.timeout",5000);
+            NfaureTest entity = JPA.em().find(NfaureTest.class,1L,LockModeType.PESSIMISTIC_WRITE);
+            entity.setCustomerName("UPDATEWITHLOCK-NICO");
+            entity.setCustomerCity("UPDATEWITHLOCK-NICO");
             JPA.em().merge(entity);
-            System.out.println("COMMITING updateWithLock");
+            System.out.println("COMMITING updateWithLock - Nico");
         });
 
         return ok("update");
