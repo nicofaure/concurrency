@@ -1,0 +1,15 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+GET     /move                       controllers.Application.move()
+GET     /update-sleep               controllers.Application.updateWithSleep()
+GET     /update                     controllers.Application.update()
+GET     /update-sleep-lock          controllers.Application.updateWithSleepAndLock()
+GET     /update-lock                controllers.Application.updateWithLock()
+GET     /read                       controllers.Application.read()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
